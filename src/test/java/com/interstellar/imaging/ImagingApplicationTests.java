@@ -1,4 +1,4 @@
-package com.interestellar.imaging;
+package com.interstellar.imaging;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
