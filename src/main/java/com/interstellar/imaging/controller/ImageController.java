@@ -5,6 +5,10 @@ import com.aspose.imaging.fileformats.tiff.TiffImage;
 import com.aspose.imaging.imageoptions.JpegOptions;
 import com.google.common.io.ByteStreams;
 import com.interstellar.imaging.models.ImageCoordinates;
+
+
+import org.geotools.gce.geotiff.GeoTiffReader;
+import org.geotools.util.factory.Hints;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,7 +17,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import com.github.jaiimageio.plugins.tiff.GeoTIFFTagSet;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -43,6 +54,18 @@ public class ImageController {
             List<File> matchingFiles = Files.walk(Paths.get(granulesPath)).filter(pathMatcher::matches).map(Path::toFile).collect(Collectors.toList());
 
             List<TiffImage> allTiffs = new ArrayList<>();
+
+//            Unsuccesful attempt to use JAI ImageIO to read TIFS, wrong value for bits per sample (15)
+//            File file0 = matchingFiles.get(0);
+//            ImageReader imageReader = ImageIO.getImageReadersByFormatName("tif").next();
+//            ImageInputStream imageInputStream = ImageIO.createImageInputStream(file0);
+//            imageReader.setInput(imageInputStream);
+//            BufferedImage bufferedImage = imageReader.read(0);
+
+//            Unsuccesful attempt to use GeoTools to read TIFS, wrong value for bits per sample (15)
+//            File file0 = matchingFiles.get(0);
+//            Hints hints = new Hints();
+//            GeoTiffReader geoTiffReader = new GeoTiffReader(file0);
 
             for (File file : matchingFiles) {
                 allTiffs.add((TiffImage) Image.load(file.getPath()));
